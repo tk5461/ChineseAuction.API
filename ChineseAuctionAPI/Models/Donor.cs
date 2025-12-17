@@ -2,7 +2,7 @@
 
 namespace ChineseAuctionAPI.Models
 {
-    public class Donors
+    public class Donor
     {
         [Key]
         public int IdDonor { get; set; }

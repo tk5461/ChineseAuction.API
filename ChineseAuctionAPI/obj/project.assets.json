@@ -5164,11 +5164,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\1\\OneDrive\\Desktop\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
+      "projectUniqueName": "C:\\Users\\1\\OneDrive\\Desktop\\projects\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
       "projectName": "ChineseAuctionAPI",
-      "projectPath": "C:\\Users\\1\\OneDrive\\Desktop\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
+      "projectPath": "C:\\Users\\1\\OneDrive\\Desktop\\projects\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
       "packagesPath": "C:\\Users\\1\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\1\\OneDrive\\Desktop\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\obj\\",
+      "outputPath": "C:\\Users\\1\\OneDrive\\Desktop\\projects\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

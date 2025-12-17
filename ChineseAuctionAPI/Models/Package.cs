@@ -2,15 +2,15 @@
 
 namespace ChineseAuctionAPI.Models
 {
-    public class Packages
+    public class Package
     {
         [Key]
-
         public int IdPackage { get; set; }
-        public string Name { get; set; }
+        public ICollection<Card> Cards { get; set; }   
+        public string Name { get; set; } 
         public string? Description { get; set; }
         public int Amount_Regular { get; set; } 
-        public int? Amount_PrimPremium { get; set; }
+        public int? Amount_Premium { get; set; }
         public int Price { get; set; }
 
     }

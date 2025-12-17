@@ -4,6 +4,7 @@ using ChineseAuctionAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChineseAuctionAPI.Migrations
 {
     [DbContext(typeof(SalesContextDB))]
-    partial class SalesContextDBModelSnapshot : ModelSnapshot
+    [Migration("20251217102259_secondCraete")]
+    partial class secondCraete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace ChineseAuctionAPI.Migrations
 
                     b.HasIndex("UserIdBayer");
 
-                    b.ToTable("Cards");
+                    b.ToTable("Card");
                 });
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Donor", b =>
@@ -120,7 +123,7 @@ namespace ChineseAuctionAPI.Migrations
 
                     b.HasIndex("DonorIdDonor");
 
-                    b.ToTable("Gifts");
+                    b.ToTable("gifts");
                 });
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Gift_Order", b =>
@@ -259,36 +262,7 @@ namespace ChineseAuctionAPI.Migrations
 
                     b.HasKey("IdBayer");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ChineseAuctionAPI.Models.winner", b =>
-                {
-                    b.Property<int>("IdWin")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdWin"));
-
-                    b.Property<int>("BuyerIdBayer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdBayer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdGift")
-                        .HasColumnType("int");
-
-                    b.Property<int>("giftsIdGift")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdWin");
-
-                    b.HasIndex("BuyerIdBayer");
-
-                    b.HasIndex("giftsIdGift");
-
-                    b.ToTable("Winners");
+                    b.ToTable("Buyers");
                 });
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Card", b =>
@@ -349,25 +323,6 @@ namespace ChineseAuctionAPI.Migrations
                     b.Navigation("Buyers");
 
                     b.Navigation("Packages");
-                });
-
-            modelBuilder.Entity("ChineseAuctionAPI.Models.winner", b =>
-                {
-                    b.HasOne("ChineseAuctionAPI.Models.User", "Buyer")
-                        .WithMany()
-                        .HasForeignKey("BuyerIdBayer")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ChineseAuctionAPI.Models.Gift", "gifts")
-                        .WithMany()
-                        .HasForeignKey("giftsIdGift")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Buyer");
-
-                    b.Navigation("gifts");
                 });
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Gift", b =>

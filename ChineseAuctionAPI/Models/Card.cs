@@ -2,15 +2,13 @@
 
 namespace ChineseAuctionAPI.Models
 {
-    public class winner
+    public class Card
     {
         [Key]
-
-        public int IdWin { get; set; }
+        public int CurdId { get; set; }
         public int IdBayer { get; set; }
-        public User Buyer { get; set; } 
         public int IdGift { get; set; }
-        public Gift gifts { get; set; }
-
+        public int price { get; set; }
     }
 }
+

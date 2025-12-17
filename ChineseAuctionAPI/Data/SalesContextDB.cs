@@ -7,13 +7,15 @@ namespace ChineseAuctionAPI.Data
     public class SalesContextDB : DbContext
     {
     public SalesContextDB(DbContextOptions<SalesContextDB> options) : base(options) { }
+    public DbSet<Card> Cards { get; set; }    
+    public DbSet<Donor> Donors { get; set; }    
+    public DbSet<Gift> Gifts { get; set; }
+    public DbSet<Gift_Order> Gifts_Orders { get; set; }   
+    public DbSet<User> Users { get; set; }
+    public DbSet<Package> Packages { get; set; }
 
-    public DbSet<Buyers> Buyers { get; set; }
-    public DbSet<Donors> Donors { get; set; }
-    public DbSet<gifts> gifts { get; set; }
-    public DbSet<Gifts_Orders> Gifts_Orders { get; set; }
-    public DbSet<Orders> Orders { get; set; }
-    public DbSet<Packages> Packages { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<winner> Winners { get; set; }
 
-        }
     }
+}

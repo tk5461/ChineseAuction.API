@@ -2,7 +2,12 @@
 
 namespace ChineseAuctionAPI.Models
 {
-    public class Buyers
+    public enum Role
+    {
+        manager,
+        user
+    }
+    public class User
     {
         [Key]
         public int IdBayer { get; set; }
@@ -15,6 +20,8 @@ namespace ChineseAuctionAPI.Models
         public string PhonNumber { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        
+        public Role role { get; set; } = Role.user;
+        public virtual ICollection<Order> Orders { get; set; }
+        public ICollection<Card> cards { get; set; } 
     }
 }

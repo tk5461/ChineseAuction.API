@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "v5s1UiAmre8=",
+  "dgSpecHash": "faZsH+oJk40=",
   "success": true,
-  "projectFilePath": "C:\\Users\\1\\OneDrive\\Desktop\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
+  "projectFilePath": "C:\\Users\\1\\OneDrive\\Desktop\\projects\\Finish Project !!\\ChineseAuctionAPI\\ChineseAuctionAPI\\ChineseAuctionAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\1\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\1\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
