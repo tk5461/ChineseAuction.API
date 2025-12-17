@@ -3,18 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChineseAuctionAPI.Models
 {
-    public class Order
+    public class Orders
     {
         [Key]
         public int OrderId { get; set; }
         [ForeignKey("IdBayer")]
-        public int userId { get; set; }
+        public int IdBayer { get; set; }
         public User Buyers { get; set; }  
-     //   public int IdPackage { get; set; }
-        public virtual ICollection<Package> Packages { get; set; }
+        public int IdPackage { get; set; }
+        public Packages Packages { get; set; } 
         public int AmountOrders { get; set; }
         public DateTime dateTime { get; set; }
-        public bool IsStatusDraft { get; set; } = false;
-        public virtual ICollection<Gift_Order> GiftsInCart { get; set; }
     }
 }

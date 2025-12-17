@@ -510,3 +510,4 @@ C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\Chinese
 C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\ChineseAuctionAPI\obj\Debug\net8.0\ChineseA.8F805C9F.Up2Date
 C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\ChineseAuctionAPI\obj\Debug\net8.0\ChineseAuctionAPI.genruntimeconfig.cache
 C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\ChineseAuctionAPI\obj\Debug\net8.0\ref\ChineseAuctionAPI.dll
+C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\ChineseAuctionAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

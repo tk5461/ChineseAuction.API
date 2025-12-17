@@ -1,5 +1,7 @@
 using System;
 using ChineseAuctionAPI.Data;
+using ChineseAuctionAPI.Repositories;
+using ChineseAuctionAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,6 +13,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//User repositories
+builder.Services.AddScoped<IuserRepository, UserRepository>();
+
+//User services
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<SalesContextDB>(options =>
          options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings"))

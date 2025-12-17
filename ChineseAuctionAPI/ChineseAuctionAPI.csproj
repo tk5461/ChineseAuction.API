@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Buyers.cs" />
+    <Compile Remove="Models\Donors.cs" />
+    <Compile Remove="Models\gifts.cs" />
+    <Compile Remove="Models\Gifts_Orders.cs" />
+    <Compile Remove="Models\Orders.cs" />
+    <Compile Remove="Models\Packages.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.11">

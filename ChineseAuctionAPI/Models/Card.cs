@@ -6,7 +6,7 @@ namespace ChineseAuctionAPI.Models
     {
         [Key]
         public int CurdId { get; set; }
-        public int IdBayer { get; set; }
+        public int userId { get; set; }
         public int IdGift { get; set; }
         public int price { get; set; }
     }

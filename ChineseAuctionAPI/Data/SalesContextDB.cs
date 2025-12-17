@@ -13,9 +13,7 @@ namespace ChineseAuctionAPI.Data
     public DbSet<Gift_Order> Gifts_Orders { get; set; }   
     public DbSet<User> Users { get; set; }
     public DbSet<Package> Packages { get; set; }
-
     public DbSet<Order> Orders { get; set; }
     public DbSet<winner> Winners { get; set; }
-
     }
 }
