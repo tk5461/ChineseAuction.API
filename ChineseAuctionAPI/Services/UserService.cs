@@ -180,8 +180,6 @@ namespace ChineseAuctionAPI.Services
                         })
                         .ToList() ?? new List<OrderDTO>()
                 };
-
-            
             }
             catch (Exception ex)
             {
