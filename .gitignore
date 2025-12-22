@@ -1,4 +1,7 @@
 ﻿bin/
 obj/
 .vs/
+[Bb]in/
+[Oo]bj/
+.vs/
 appsettings.Development.json;

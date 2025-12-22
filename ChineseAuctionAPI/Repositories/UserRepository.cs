@@ -16,8 +16,19 @@ namespace ChineseAuctionAPI.Repositories
         public async Task<User> AddAsync(User user)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException?.Message != null && ex.InnerException.Message.Contains("IX_Users_Email"))
+                {
+                    throw new InvalidOperationException("Email already exists.", ex);
+                }
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -43,7 +54,7 @@ namespace ChineseAuctionAPI.Repositories
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.Include(u => u.userId).ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -57,7 +68,6 @@ namespace ChineseAuctionAPI.Repositories
             return await _context.Users
                     .FirstOrDefaultAsync(p => p.userId == id);
         }
-
 
         public async Task<User?> GetUserWirhOrdersAsync(int userId)
         {

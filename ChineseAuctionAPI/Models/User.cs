@@ -4,8 +4,8 @@ namespace ChineseAuctionAPI.Models
 {
     public enum Role
     {
-        manager,
-        user
+        user,
+        Manager
     }
     public class User
     {
@@ -23,7 +23,7 @@ namespace ChineseAuctionAPI.Models
         public string City { get; set; }
         public string Address { get; set; }
         public Role role { get; set; } = Role.user;
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } 
         public ICollection<Card> cards { get; set; } 
     }
 }
