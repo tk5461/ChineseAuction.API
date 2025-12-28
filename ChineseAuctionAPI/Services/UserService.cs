@@ -86,7 +86,7 @@ namespace ChineseAuctionAPI.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.userId.ToString()),
                 new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                new Claim("isManager", isManager)
+                new Claim(ClaimTypes.Role, user.role.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -172,7 +172,6 @@ namespace ChineseAuctionAPI.Services
                             orders = o.GiftsInCart?
                                 .Select(g => new OrderItemDTO
                                 {
-                                    IdGift = g.IdGift,
                                     Amount = g.Amount,
                                    //price = g.price
                                 })

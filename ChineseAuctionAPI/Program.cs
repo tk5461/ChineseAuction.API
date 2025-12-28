@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.Repositories;
@@ -6,10 +6,10 @@ using ChineseAuctionAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models; 
 
 var builder = WebApplication.CreateBuilder(args);
 
-//JWT Authentication Configuration
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSection["Key"]);
 
@@ -34,30 +34,51 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.FromSeconds(30)
     };
 });
-// Add services to the container.
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// JWT
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ChineseAuctionAPI", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "נא להזין טוקן בלבד (ללא המילה Bearer)"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            new string[] {}
+        }
+    });
+});
 
-//User repositories
 builder.Services.AddScoped<IuserRepository, UserRepository>();
-
-//User services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryRpository, CategoryRpository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IOerderRepository, OerderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IGiftRepository, GiftRepository>();
+builder.Services.AddScoped<IGiftService, GiftService>();
 
 builder.Services.AddDbContext<SalesContextDB>(options =>
          options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings"))
 );
+
 var app = builder.Build();
 
-
-builder.Services.AddAuthorization();
-
-
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

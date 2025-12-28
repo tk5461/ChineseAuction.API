@@ -4,14 +4,6 @@ using System.Drawing;
 
 namespace ChineseAuctionAPI.Models
 {
-    public enum GiftCategory
-    {
-        Electronics,
-        HomeGoods,
-        Vacation,
-        Jewelry,
-        Other
-    }
     public class Gift 
     {
         [Key]
@@ -19,6 +11,7 @@ namespace ChineseAuctionAPI.Models
         public string Name { get; set; }
         public string? Description { get; set; }
         public GiftCategory Category { get; set; }
+        public int CategoryId { get; set; }
         public int Qeuntity { get; set; } = 1;
         public int price { get; set; }
         public string? Image { get; set; } 

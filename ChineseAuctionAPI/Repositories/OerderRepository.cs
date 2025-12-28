@@ -60,7 +60,6 @@ namespace ChineseAuctionAPI.Repositories
             catch (Exception ex)
             {
                 throw new InvalidOperationException("Error completing order.", ex);
-                throw;
             }
         }
 

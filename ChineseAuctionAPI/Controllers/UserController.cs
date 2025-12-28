@@ -1,12 +1,14 @@
-﻿using ChineseAuctionAPI.DTO;
+﻿using System.Threading.Tasks;
+using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace ChineseAuctionAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
