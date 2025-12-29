@@ -1,17 +1,20 @@
 ﻿using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Models;
-using ChineseAuctionAPI.Repositories;
+using ChineseAuctionAPI.Repositories.Intarfaces;
+using ChineseAuctionAPI.Services.Intarfaces;
 
 namespace ChineseAuctionAPI.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRpository _categoryRepository;
+        private readonly IConfiguration _config;
 
 
-        public CategoryService(ICategoryRpository categoryRepository)
+        public CategoryService(ICategoryRpository categoryRepository, IConfiguration config)
         {
             _categoryRepository = categoryRepository;
+            _config = config;
         }
 
         public async Task<IEnumerable<GiftCategory>> GetAllAsync()

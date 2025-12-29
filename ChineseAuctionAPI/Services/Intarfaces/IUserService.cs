@@ -2,7 +2,7 @@
 using ChineseAuctionAPI.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChineseAuctionAPI.Services
+namespace ChineseAuctionAPI.Services.Intarfaces
 {
     public interface IUserService
     {

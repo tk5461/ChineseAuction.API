@@ -1,5 +1,6 @@
 ﻿using ChineseAuctionAPI.DTO;
-using ChineseAuctionAPI.Repositories;
+using ChineseAuctionAPI.Repositories.Intarfaces;
+using ChineseAuctionAPI.Services.Intarfaces;
 
 namespace ChineseAuctionAPI.Services
 {
@@ -7,6 +8,7 @@ namespace ChineseAuctionAPI.Services
     {
         private readonly IOerderRepository _OrderRepository;
         private readonly IConfiguration _config;
+
 
         public OrderService(IOerderRepository oerderRepository, IConfiguration config)
         {

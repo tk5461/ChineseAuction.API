@@ -1,6 +1,6 @@
 ﻿using ChineseAuctionAPI.Models;
 
-namespace ChineseAuctionAPI.Repositories
+namespace ChineseAuctionAPI.Repositories.Intarfaces
 {
     public interface ICategoryRpository
     {

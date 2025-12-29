@@ -1,15 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Models;
-using ChineseAuctionAPI.Repositories;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using ChineseAuctionAPI.Services.Intarfaces;
+using ChineseAuctionAPI.Repositories.Intarfaces;
 
 namespace ChineseAuctionAPI.Services
 {
@@ -17,60 +14,147 @@ namespace ChineseAuctionAPI.Services
     {
         private readonly IuserRepository _userRepository;
         private readonly IConfiguration _config;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IuserRepository userRepository, IConfiguration config)
+        public UserService(IuserRepository userRepository, IConfiguration config, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _config = config;
+            _logger = logger;
         }
 
         public async Task<string?> RegisterAsync(LoginUserDTO dto)
         {
-            if (dto == null) throw new ArgumentNullException(nameof(dto));
-            if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.password))
-                return null;
-
-            var email = dto.Email.Trim();
-
-            if (await _userRepository.EmailExistsAsync(email))
-                return null;
-
-            var hashed = BCrypt.Net.BCrypt.HashPassword(dto.password);
-
-            var newUser = new User
+            try
             {
-                Identity = dto.Identity,
-                FirstName = dto.First_Name,
-                LastName = dto.Last_Name,
-                password = hashed,
-                Email = email,
-                PhonNumber = dto.PhonNumber,
-                City = dto.City,
-                Address = dto.Address,
-                Orders = new List<Order>(),
-                cards = new List<Card>()
-            };
+                if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-            var created = await _userRepository.AddAsync(newUser);
-            var token = GenerateJwtToken(created);
+                if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.password))
+                    return null;
 
-            return token;
+                var email = dto.Email.Trim();
+
+                if (await _userRepository.EmailExistsAsync(email))
+                    return null;
+
+                var hashed = BCrypt.Net.BCrypt.HashPassword(dto.password);
+
+                var newUser = new User
+                {
+                    Identity = dto.Identity,
+                    FirstName = dto.First_Name,
+                    LastName = dto.Last_Name,
+                    password = hashed,
+                    Email = email,
+                    PhonNumber = dto.PhonNumber,
+                    City = dto.City,
+                    Address = dto.Address,
+                    Orders = new List<Order>(),
+                    cards = new List<Card>()
+                };
+
+                var created = await _userRepository.AddAsync(newUser);
+                return GenerateJwtToken(created);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בתהליך ההרשמה עבור אימייל: {Email}", dto?.Email);
+                throw new Exception("אירעה שגיאה פנימית במהלך ההרשמה.");
+            }
         }
 
         public async Task<string?> LoginAsync(string email, string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-                return null;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                    return null;
 
-            var u = await _userRepository.GetByEmailAsync(email.Trim());
-            if (u == null) return null;
+                var u = await _userRepository.GetByEmailAsync(email.Trim());
+                if (u == null) return null;
 
-            if (!BCrypt.Net.BCrypt.Verify(password, u.password))
-                return null;
+                if (!BCrypt.Net.BCrypt.Verify(password, u.password))
+                    return null;
 
-            var token = GenerateJwtToken(u);
+                return GenerateJwtToken(u);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בתהליך ההתחברות עבור אימייל: {Email}", email);
+                throw new Exception("אירעה שגיאה במהלך ניסיון ההתחברות.");
+            }
+        }
 
-            return token;
+        public async Task<IEnumerable<User_DTO>> GetAllAsync()
+        {
+            try
+            {
+                var users = await _userRepository.GetAllAsync();
+                return users.Select(u => MapToUserDTO(u)).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בשליפת כל המשתמשים");
+                throw new Exception("אירעה שגיאה בעת שליפת המשתמשים.");
+            }
+        }
+
+        public async Task<User_DTO?> GetByIdAsync(int id)
+        {
+            try
+            {
+                if (id <= 0) return null;
+                var user = await _userRepository.GetByIdAsync(id);
+                return user != null ? MapToUserDTO(user) : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בשליפת משתמש לפי מזהה: {Id}", id);
+                throw new Exception($"אירעה שגיאה בשליפת משתמש מזהה {id}.");
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                return await _userRepository.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה במחיקת משתמש: {Id}", id);
+                throw new Exception($"שגיאה במחיקת משתמש {id}.");
+            }
+        }
+
+        public async Task<DTOuserOrder?> GetUserWirhOrdersAsync(int userId)
+        {
+            try
+            {
+                var u = await _userRepository.GetUserWirhOrdersAsync(userId);
+                if (u == null) return null;
+
+                return new DTOuserOrder
+                {
+                    First_Name = u.FirstName,
+                    Last_Name = u.LastName,
+                    orders = u.Orders?.Select(o => new OrderDTO
+                    {
+                        Status = o.Status,
+                        userId = o.userId,
+                        dateTime = o.dateTime,
+                        orders = o.GiftsInCart?.Select(g => new OrderItemDTO
+                        {
+                            Amount = g.Amount
+                        }).ToList() ?? new List<OrderItemDTO>()
+                    }).ToList() ?? new List<OrderDTO>()
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בשליפת הזמנות עבור משתמש: {UserId}", userId);
+                throw new Exception($"נכשל בשליפת הזמנות עבור משתמש {userId}.");
+            }
         }
 
         private string GenerateJwtToken(User user)
@@ -80,7 +164,6 @@ namespace ChineseAuctionAPI.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyStr));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var isManager = (user.role == Role.Manager).ToString().ToLower();
 
             var claims = new List<Claim>
             {
@@ -99,7 +182,7 @@ namespace ChineseAuctionAPI.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        //return new User_DTO
+
         private static User_DTO MapToUserDTO(User user)
         {
             return new User_DTO
@@ -113,78 +196,5 @@ namespace ChineseAuctionAPI.Services
                 Address = user.Address,
             };
         }
-        //get all users
-        public async Task<IEnumerable<User_DTO>> GetAllAsync()
-        {
-            try
-            {
-                var users = await _userRepository.GetAllAsync();
-                return users.Select(u => MapToUserDTO(u)).ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while retrieving all users.", ex);
-                throw;
-            }
-
-        }
-        public async Task<User_DTO?> GetByIdAsync(int id)
-        {
-            if (id <= 0) return null;
-            try
-            {
-                var user = await _userRepository.GetByIdAsync(id);
-                return user != null ? MapToUserDTO(user) : null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Id מזהה {id}", ex);
-            }
-        }
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                return await _userRepository.DeleteAsync(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"error delete user {id}", ex);
-            }
-        }
-        public async Task<DTOuserOrder?> GetUserWirhOrdersAsync(int userId)
-        {
-            try
-            {
-                var u = await _userRepository.GetUserWirhOrdersAsync(userId);
-                if (u == null) return null;
-
-                return new DTOuserOrder
-                {
-                    First_Name = u.FirstName ,
-                    Last_Name = u.LastName ,
-                    orders = u.Orders?
-                        .Select(o => new OrderDTO
-                        {
-                            Status = o.Status,
-                            userId = o.userId,
-                            dateTime = o.dateTime,
-                            orders = o.GiftsInCart?
-                                .Select(g => new OrderItemDTO
-                                {
-                                    Amount = g.Amount,
-                                   //price = g.price
-                                })
-                                .ToList() ?? new List<OrderItemDTO>()
-                        })
-                        .ToList() ?? new List<OrderDTO>()
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to retrieve user orders for ID: {userId}. Error: {ex.Message}", ex);
-            }
-        }
-    } 
+    }
 }
-

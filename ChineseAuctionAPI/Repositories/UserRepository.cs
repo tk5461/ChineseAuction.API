@@ -1,5 +1,6 @@
 ﻿using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.Models;
+using ChineseAuctionAPI.Repositories.Intarfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChineseAuctionAPI.Repositories
@@ -16,19 +17,8 @@ namespace ChineseAuctionAPI.Repositories
         public async Task<User> AddAsync(User user)
         {
             _context.Users.Add(user);
-            try
-            {
-                await _context.SaveChangesAsync();
+             await _context.SaveChangesAsync();
                 return user;
-            }
-            catch (DbUpdateException ex)
-            {
-                if (ex.InnerException?.Message != null && ex.InnerException.Message.Contains("IX_Users_Email"))
-                {
-                    throw new InvalidOperationException("Email already exists.", ex);
-                }
-                throw;
-            }
         }
 
         public async Task<bool> DeleteAsync(int id)

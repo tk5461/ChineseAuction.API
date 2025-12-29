@@ -1,5 +1,6 @@
 ﻿using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.Models;
+using ChineseAuctionAPI.Repositories.Intarfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChineseAuctionAPI.Repositories
@@ -14,8 +15,6 @@ namespace ChineseAuctionAPI.Repositories
 
         public async Task AddOrUpdateGiftInOrderAsync(int orderId, int giftId, int amount)
         {
-            try
-            {
                var gift = await _context.Gifts.FindAsync(giftId);
                var ord = await _context.Orders
                 .Include(o => o.GiftsInCart)
@@ -40,33 +39,19 @@ namespace ChineseAuctionAPI.Repositories
                 }
                 ord.price += (gift.price * amount);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error adding or updating gift in order.", ex);
-            }
         }
 
         public Task<bool> ComleteOrder(int orderId)
         {
-            try
-            {
                 var order = _context.Orders.Find(orderId);
                 if (order == null) return Task.FromResult(false);
                 order.Status = OrderStatus.Completed;
                 _context.SaveChanges();
                 return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error completing order.", ex);
-            }
         }
 
         public async Task<Order> CreateDraftOrderAsync(int userId)
         {
-            try
-            {
                 var order = new Order
                 {
                     userId = userId,
@@ -77,17 +62,10 @@ namespace ChineseAuctionAPI.Repositories
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
                 return order;
-            } 
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error creating draft order.", ex);         
-            }
         }
 
         public async Task<bool> DeleteAsync(int orderId, int giftId, int amount)
         {
-            try
-            {
                 var order = await _context.Orders
                     .Include(o => o.GiftsInCart)
                     .FirstOrDefaultAsync(o => o.OrderId == orderId);
@@ -107,56 +85,28 @@ namespace ChineseAuctionAPI.Repositories
                 }
                 await _context.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error deleting gift from order.", ex);
-                return false;    
-            }
         }
 
         public async Task<IEnumerable<Order?>> GetAllAsync(int userId)
         {
-            try
-            {
                return await _context.Orders
                     .Where(o => o.userId == userId)
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error retrieving orders for user.", ex);
-            }
         }
         public async Task<Order?> GetByIdWithGiftsAsync(int orderId) 
         {
-            try
-            {
-                return await _context.Orders
+                 return await _context.Orders
                     .Include(o => o.GiftsInCart) 
                         .ThenInclude(go => go.gifts)
                     .FirstOrDefaultAsync(o => o.OrderId == orderId);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error adding gift in order.", ex);
-            }
         }
 
         public async Task<Order?> GetDraftOrderByUserAsync(int userId)
         {
-            try
-            {
-                return await _context.Orders
+                 return await _context.Orders
                     .Include(o => o.GiftsInCart) 
                         .ThenInclude(go => go.gifts)
                     .FirstOrDefaultAsync(o => o.userId == userId && o.Status == OrderStatus.Draft);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error retrieving draft order for user.", ex);
-                throw;
-            }
         }
     }
 }

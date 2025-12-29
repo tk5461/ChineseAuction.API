@@ -5,12 +5,9 @@ using Microsoft.EntityFrameworkCore;
 public class GiftRepository : IGiftRepository
 {
     private readonly SalesContextDB _context;
-    private readonly IConfiguration _config;
-
-    public GiftRepository(SalesContextDB context, IConfiguration config)
+    public GiftRepository(SalesContextDB context)
     {
         _context = context;
-        _config = config;
     }
 
     public async Task<IEnumerable<Gift>> GetAllAsync()
@@ -27,7 +24,10 @@ public class GiftRepository : IGiftRepository
     {
         await _context.Gifts.AddAsync(gift);
         await _context.SaveChangesAsync();
-        return gift;
+        return await _context.Gifts
+         .Include(g => g.Donor)
+         .Include(g => g.Category)
+         .FirstAsync(g => g.IdGift == gift.IdGift);
     }
 
     public async Task<bool> UpdateAsync(Gift gift)

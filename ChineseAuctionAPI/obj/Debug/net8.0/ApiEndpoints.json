@@ -109,6 +109,85 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ChineseAuctionAPI.Controllers.DonorController",
+    "Method": "Get",
+    "RelativePath": "api/Donor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ChineseAuctionAPI.Controllers.DonorController",
+    "Method": "Post",
+    "RelativePath": "api/Donor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ChineseAuctionAPI.DTO.DonorDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ChineseAuctionAPI.Controllers.DonorController",
+    "Method": "Get",
+    "RelativePath": "api/Donor/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ChineseAuctionAPI.Controllers.DonorController",
+    "Method": "Put",
+    "RelativePath": "api/Donor/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "ChineseAuctionAPI.DTO.DonorDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ChineseAuctionAPI.Controllers.DonorController",
+    "Method": "Delete",
+    "RelativePath": "api/Donor/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ChineseAuctionAPI.Controllers.GiftController",
     "Method": "Get",
     "RelativePath": "api/Gift",

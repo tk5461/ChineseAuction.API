@@ -2,7 +2,9 @@
 using System.Text;
 using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.Repositories;
+using ChineseAuctionAPI.Repositories.Intarfaces;
 using ChineseAuctionAPI.Services;
+using ChineseAuctionAPI.Services.Intarfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -72,6 +74,8 @@ builder.Services.AddScoped<IOerderRepository, OerderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IGiftRepository, GiftRepository>();
 builder.Services.AddScoped<IGiftService, GiftService>();
+builder.Services.AddScoped<IDonorRepository, DonorRepository>();
+builder.Services.AddScoped<IDonorService, DonorService>();
 
 builder.Services.AddDbContext<SalesContextDB>(options =>
          options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStrings"))

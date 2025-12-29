@@ -7,13 +7,20 @@ namespace ChineseAuctionAPI.Models
     {
             [Key]
             public int IdPackageOrder { get; set; }
+            [Required] 
             public int OrderId { get; set; }
-            [ForeignKey("OrderId")]
+            [ForeignKey(nameof(OrderId))]
             public virtual Order Order { get; set; }
-            public int IdPackage { get; set; }
-            [ForeignKey("IdPackage")]
+          [Required]
+           public int IdPackage { get; set; }
+            [ForeignKey(nameof(IdPackage))]
             public virtual Package Package { get; set; }
-            public int Quantity { get; set; } = 1;
-            public int PriceAtPurchase { get; set; }
+            [Required]
+            [Range(1, 100, ErrorMessage = "כמות חבילות בהזמנה חייבת להיות בין 1 ל-100")]
+             public int Quantity { get; set; } = 1;
+            [Required]
+        [Range(0, 50000, ErrorMessage = "המחיר בעת הרכישה אינו יכול להיות שלילי")]
+        public int PriceAtPurchase { get; set; }
         }
     }
+

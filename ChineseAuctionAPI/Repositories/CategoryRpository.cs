@@ -1,5 +1,6 @@
 ﻿using ChineseAuctionAPI.Data;
 using ChineseAuctionAPI.Models;
+using ChineseAuctionAPI.Repositories.Intarfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -9,13 +10,11 @@ namespace ChineseAuctionAPI.Repositories
         public class CategoryRpository : ICategoryRpository
         {
             private readonly SalesContextDB _context;
-            private readonly IConfiguration _config;
 
 
-        public CategoryRpository(SalesContextDB context , IConfiguration config)
+        public CategoryRpository(SalesContextDB context )
             {
                 _context = context;
-                _config = config;
         }
 
             public async Task<IEnumerable<GiftCategory>> GetAllAsync()

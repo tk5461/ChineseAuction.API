@@ -1,6 +1,6 @@
 ﻿using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Models;
-using ChineseAuctionAPI.Services;
+using ChineseAuctionAPI.Services.Intarfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChineseAuctionAPI.Controllers
@@ -10,66 +10,104 @@ namespace ChineseAuctionAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly ILogger<CategoryController> _logger; 
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
+            _logger = logger;
         }
 
-        // 1. שליפת כל הקטגוריות
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GiftCategory>>> GetAll()
         {
-            var categories = await _categoryService.GetAllAsync();
-            return Ok(categories);
+            try
+            {
+                var categories = await _categoryService.GetAllAsync();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בשליפת כל הקטגוריות");
+                return StatusCode(500, "אירעה שגיאה פנימית בשרת בעת שליפת הנתונים.");
+            }
         }
 
-        // 2. שליפת קטגוריה לפי מזהה
+
         [HttpGet("{id}")]
         public async Task<ActionResult<GiftCategory>> GetById(int id)
         {
-            var category = await _categoryService.GetByIdAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound($"Category with ID {id} not found.");
+                var category = await _categoryService.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return NotFound($"Category with ID {id} not found.");
+                }
+                return Ok(category);
             }
-            return Ok(category);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בשליפת קטגוריה מזהה: {Id}", id);
+                return StatusCode(500, "אירעה שגיאה פנימית בשרת.");
+            }
         }
 
-        // 3. יצירת קטגוריה חדשה - מקבל DTO (רק שם)
+
         [HttpPost]
         public async Task<ActionResult<GiftCategory>> Create([FromBody] CategoryDTO categoryDto)
         {
-            if (categoryDto == null) return BadRequest();
+            try
+            {
+                if (categoryDto == null) return BadRequest("Invalid data.");
 
-            // ה-Service יהפוך את ה-DTO למודל ויוסיף ל-DB
-            var newCategory = await _categoryService.AddAsync(categoryDto);
-
-            return CreatedAtAction(nameof(GetById), new { id = newCategory.Id }, newCategory);
+                var newCategory = await _categoryService.AddAsync(categoryDto);
+                return CreatedAtAction(nameof(GetById), new { id = newCategory.Id }, newCategory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה ביצירת קטגוריה חדשה");
+                return StatusCode(500, "אירעה שגיאה בעת שמירת הקטגוריה.");
+            }
         }
 
-        // 4. עדכון קטגוריה קיימת
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] GiftCategory category)
         {
-            var success = await _categoryService.UpdateAsync(id, category);
-            if (!success)
+            try
             {
-                return NotFound($"Update failed. Category {id} not found.");
+                var success = await _categoryService.UpdateAsync(id, category);
+                if (!success)
+                {
+                    return NotFound($"Update failed. Category {id} not found.");
+                }
+                return NoContent();
             }
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בעדכון קטגוריה מזהה: {Id}", id);
+                return StatusCode(500, "אירעה שגיאה בעת עדכון הקטגוריה.");
+            }
         }
 
-        // 5. מחיקת קטגוריה
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _categoryService.DeleteAsync(id);
-            if (!success)
+            try
             {
-                return NotFound($"Delete failed. Category {id} not found.");
+                var success = await _categoryService.DeleteAsync(id);
+                if (!success)
+                {
+                    return NotFound($"Delete failed. Category {id} not found.");
+                }
+                return Ok(new { message = "Category deleted successfully." });
             }
-            return Ok(new { message = "Category deleted successfully." });
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה במחיקת קטגוריה מזהה: {Id}", id);
+                return StatusCode(500, "אירעה שגיאה בעת מחיקת הקטגוריה.");
+            }
         }
     }
 }

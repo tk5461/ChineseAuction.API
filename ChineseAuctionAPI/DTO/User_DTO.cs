@@ -6,7 +6,9 @@ namespace ChineseAuctionAPI.DTO
     public class User_DTO
     {
         public string Identity { get; set; } = string.Empty;
+        [Required]
         public string First_Name { get; set; } = string.Empty;
+        [Required]
         public string Last_Name { get; set; } = string.Empty;
 
         [EmailAddress]
@@ -27,6 +29,8 @@ namespace ChineseAuctionAPI.DTO
 
     public class LoginUserDTO
     {
+        [Required]
+        [StringLength(9, MinimumLength = 9, ErrorMessage = "תעודת זהות חייבת להכיל 9 ספרות")]
         public string Identity { get; set; } = string.Empty;
 
         [Required]

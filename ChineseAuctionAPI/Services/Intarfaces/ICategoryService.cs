@@ -1,7 +1,7 @@
 ﻿using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Models;
 
-namespace ChineseAuctionAPI.Services
+namespace ChineseAuctionAPI.Services.Intarfaces
     {
         public interface ICategoryService
         {

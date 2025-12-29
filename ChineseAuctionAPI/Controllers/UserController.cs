@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ChineseAuctionAPI.DTO;
-using ChineseAuctionAPI.Services;
+using ChineseAuctionAPI.Services.Intarfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,62 +13,104 @@ namespace ChineseAuctionAPI.Controllers
     {
         private readonly IUserService _userService;
         public UserController(IUserService userService)
-        { 
-            _userService = userService; 
+        {
+            _userService = userService;
         }
 
         [HttpGet("GetAllAsync")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _userService.GetAllAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
+
         [HttpGet("GetByIdAsync/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userService.GetByIdAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _userService.GetByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("GetUserWirhOrdersAsync/{userId}")]
         public async Task<IActionResult> GetUserWithOrders(int userId)
         {
-            var userWithOrders = await _userService.GetUserWirhOrdersAsync(userId);
-            if (userWithOrders == null)
+            try
             {
-                return NotFound();
+                var userWithOrders = await _userService.GetUserWirhOrdersAsync(userId);
+                if (userWithOrders == null)
+                {
+                    return NotFound();
+                }
+                return Ok(userWithOrders);
             }
-            return Ok(userWithOrders);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] LoginUserDTO dto)
         {
-            var resp = await _userService.RegisterAsync(dto);
-            return Ok(resp);
+            try
+            {
+                var resp = await _userService.RegisterAsync(dto);
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO dto)
         {
-            var resp = await _userService.LoginAsync(dto.Email , dto.password );
-            return Ok(resp);
+            try
+            {
+                var resp = await _userService.LoginAsync(dto.Email, dto.password);
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpDelete("DeleteUser/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var result = await _userService.DeleteAsync(id);
-            if (!result)
+            try
             {
-                return Ok("NotFound");
+                var result = await _userService.DeleteAsync(id);
+                if (!result)
+                {
+                    return Ok("NotFound");
+                }
+                return Ok("delet well");
             }
-            return Ok("delet well");
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
-

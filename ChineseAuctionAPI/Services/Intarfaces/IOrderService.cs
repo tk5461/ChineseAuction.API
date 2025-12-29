@@ -1,6 +1,6 @@
 ﻿using ChineseAuctionAPI.DTO;
 
-namespace ChineseAuctionAPI.Services
+namespace ChineseAuctionAPI.Services.Intarfaces
 {
     public interface IOrderService
     {
