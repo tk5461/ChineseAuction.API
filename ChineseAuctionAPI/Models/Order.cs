@@ -16,7 +16,6 @@ namespace ChineseAuctionAPI.Models
         public int userId { get; set; }
         [ForeignKey(nameof(userId))]
         public User User { get; set; }  
-        public  ICollection<Package_Order> Package_Order { get; set; }
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "המחיר אינו יכול להיות שלילי")]
         public int price { get; set; } = 1;
@@ -24,6 +23,8 @@ namespace ChineseAuctionAPI.Models
         public DateTime dateTime { get; set; } = DateTime.Now;
         [Required]
         public OrderStatus Status { get; set; } = OrderStatus.Draft;
+        public ICollection<Package_Order> PackageInCard { get; set; }
+
         public ICollection<Gift_Order> GiftsInCart { get; set; } 
     }
 }

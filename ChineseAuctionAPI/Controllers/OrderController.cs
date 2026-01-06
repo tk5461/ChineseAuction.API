@@ -11,10 +11,13 @@ namespace ChineseAuctionAPI.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly ILogger<OrderController> _logger;
 
-        public OrderController(IOrderService IOrderService)
+
+        public OrderController(IOrderService IOrderService ,ILogger<OrderController> logger)
         {
             _orderService = IOrderService;
+            _logger = logger;
         }
 
         [HttpGet("user/{userId}")]
@@ -27,24 +30,28 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error get orders for userId" , userId);
                 return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("draft/{userId}")]
-        public async Task<ActionResult<OrderDTO>> GetDraftOrder(int userId)
+        [HttpGet("GetByIdWithGiftsAsync/{userId}")]
+        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAllAsynceByUserId(int userId)
         {
             try
             {
-                var draft = await _orderService.GetDraftOrderByUserAsync(userId);
-                if (draft == null) return NotFound("לא נמצא סל קניות פעיל למשתמש זה.");
-                return Ok(draft);
+                var orders = await _orderService.GetDraftOrderByUserAsync(userId);
+                return Ok(orders);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+               
+                _logger.LogError(ex, "Error fetching orders for user ID: {UserId}", userId);
+                return StatusCode(500, "Internal server error");
             }
         }
+
+
 
         [HttpGet("{orderId}")]
         public async Task<ActionResult<OrderDTO>> GetById(int orderId)
@@ -57,6 +64,7 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error get order for orderId {orderId}", orderId);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -66,12 +74,13 @@ namespace ChineseAuctionAPI.Controllers
         {
             try
             {
-                var result = await _orderService.AddOrUpdateGiftInOrderAsync(request.OrderId, request.GiftId, request.Amount);
+                var result = await _orderService.AddOrUpdateGiftInOrderAsync(request.userId, request.GiftId, request.Amount);
                 if (result) return Ok("הסל עודכן בהצלחה.");
                 return BadRequest("שגיאה בעדכון הסל.");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error add gift to the cart");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -87,6 +96,7 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error renove for gift giftId {giftId}", giftId);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -102,6 +112,7 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error complitie order  {orderId}", orderId);
                 return StatusCode(500, ex.Message);
             }
         }

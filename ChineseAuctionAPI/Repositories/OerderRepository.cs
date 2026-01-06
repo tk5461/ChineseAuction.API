@@ -13,43 +13,60 @@ namespace ChineseAuctionAPI.Repositories
             _context = context;
         }
 
-        public async Task AddOrUpdateGiftInOrderAsync(int orderId, int giftId, int amount)
+        public async Task AddOrUpdateGiftInOrderAsync(int userId, int IdGift, int amount)
         {
-               var gift = await _context.Gifts.FindAsync(giftId);
-               var ord = await _context.Orders
+            var ord = await _context.Orders
                 .Include(o => o.GiftsInCart)
-               .FirstOrDefaultAsync(o => o.OrderId == orderId);
+                .FirstOrDefaultAsync(o => o.userId == userId && o.Status == OrderStatus.Draft);
 
-                var existing = ord.GiftsInCart.FirstOrDefault(go => go.IdGift == giftId);
+            if (ord == null)
+            {
+                ord = new Order
+                {
+                    userId = userId,
+                    price = 0,
+                    dateTime = DateTime.Now,
+                    Status = OrderStatus.Draft,
+                    GiftsInCart = new List<Gift_Order>() 
+                };
+                _context.Orders.Add(ord);
+            }
 
-                if (existing != null)
+            var existing = ord.GiftsInCart?.FirstOrDefault(go => go.IdGift == IdGift);
+
+            if (existing != null)
+                existing.Amount += amount;
+
+            else
+            {
+                var newItem = new Gift_Order
                 {
-                    existing.Amount += amount;
-                    ord.price += (gift.price * amount);
-                }
-                else
-                {
-                    var newItem = new Gift_Order
-                    {
-                        IdGift = giftId,
-                        OrderId = orderId,
-                        Amount = amount,
-                    };
-                    _context.Gifts_Orders.Add(newItem);
-                }
+                    IdGift = IdGift,
+                    Amount = amount,
+                    OrderId = ord.OrderId // ה-EF יקשר זאת אוטומטית
+                };
+                ord.GiftsInCart.Add(newItem);
+            }
+
+            // 5. עדכון המחיר הכללי של ההזמנה ושמירה
+            var gift = await _context.Gifts.FindAsync(IdGift);
+            if (gift != null)
+            {
                 ord.price += (gift.price * amount);
-                await _context.SaveChangesAsync();
-        }
+            }
 
-        public Task<bool> ComleteOrder(int orderId)
+            await _context.SaveChangesAsync();
+        }
+        public async Task<bool> ComleteOrder(int orderId)
         {
-                var order = _context.Orders.Find(orderId);
-                if (order == null) return Task.FromResult(false);
-                order.Status = OrderStatus.Completed;
-                _context.SaveChanges();
-                return Task.FromResult(true);
-        }
+            var order = await _context.Orders.FindAsync(orderId);
 
+            if (order == null || order.Status == OrderStatus.Completed) return false; 
+            order.Status = OrderStatus.Completed;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<Order> CreateDraftOrderAsync(int userId)
         {
                 var order = new Order
@@ -101,12 +118,15 @@ namespace ChineseAuctionAPI.Repositories
                     .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
-        public async Task<Order?> GetDraftOrderByUserAsync(int userId)
+        public async Task<IEnumerable<Order>> GetDraftOrderByUserAsync(int userId)
         {
-                 return await _context.Orders
-                    .Include(o => o.GiftsInCart) 
-                        .ThenInclude(go => go.gifts)
-                    .FirstOrDefaultAsync(o => o.userId == userId && o.Status == OrderStatus.Draft);
-        }
+            return await _context.Orders
+                .Where(o => o.userId == userId)
+                .Include(o => o.GiftsInCart)
+                    .ThenInclude(og => og.gifts)
+                        .ThenInclude(g => g.Category)
+                .ToListAsync();
+    }
+
     }
 }

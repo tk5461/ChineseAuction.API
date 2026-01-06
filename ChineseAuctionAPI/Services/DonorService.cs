@@ -142,6 +142,48 @@ namespace ChineseAuctionAPI.Services
             {
                 throw new Exception("Cannot GetGifts by IdDonor", ex);
             }
-        }    
-}
+        }
+
+        public async Task<IEnumerable<Donor>> GetDonorByNameAsync(string name)
+        {
+            try
+            {
+                return await _repository.GetByNameAsync(name);
+      
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching donor with name {name}.");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Donor>> GetDonorByEmailAsync(string Email)
+        {
+            try
+            {
+                return await _repository.GetByEmailAsync(Email);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching donor with Email {Email}.");
+                throw new Exception("", ex);
+            }
+        }
+
+        public async Task<Donor> GetDonorByGiftAsync(string Gift)
+        {
+            try
+            {
+                return await _repository.GetByGiftAsync(Gift);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching donor with Gift {Gift}.");
+                throw new Exception("", ex);
+            }
+        }
+    }
 }

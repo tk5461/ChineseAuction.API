@@ -21,3 +21,11 @@ namespace ChineseAuctionAPI.DTO
         public int IdDonor { get; set; }
      }
 }
+public class GiftDTONew
+{
+    public int IdGift { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Price { get; set; }
+    public int NumOfBuyers { get; set; } 
+}

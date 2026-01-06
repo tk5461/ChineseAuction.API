@@ -10,3 +10,4 @@ namespace ChineseAuctionAPI.Models
 
     }
 }
+

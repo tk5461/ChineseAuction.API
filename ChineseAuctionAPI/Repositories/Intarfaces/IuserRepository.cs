@@ -11,6 +11,6 @@ namespace ChineseAuctionAPI.Repositories.Intarfaces
         Task<User?> GetByIdAsync(int id);
         Task<bool> DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
-        Task<User?> GetUserWirhOrdersAsync(int userId);
+        Task<User?> GetUserWithOrdersAndGiftsAsync(int id);
     }
 }

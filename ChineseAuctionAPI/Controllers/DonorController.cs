@@ -12,10 +12,12 @@ namespace ChineseAuctionAPI.Controllers
     public class DonorController : ControllerBase
     {
         private readonly IDonorService _service;
+        private readonly ILogger<DonorController> _logger;
 
-        public DonorController(IDonorService service)
+        public DonorController(IDonorService service, ILogger<DonorController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -28,6 +30,7 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving all donors");
             }
         }
 
@@ -42,6 +45,7 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving donor with ID {Id}", id);
             }
         }
 
@@ -56,6 +60,7 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error creating new donor");
             }
         }
 
@@ -70,6 +75,7 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error updating donor with ID {Id}", id);
             }
         }
 
@@ -84,6 +90,7 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error deleting donor with ID {Id}", id);
             }
         }
         [HttpGet("GetGiftByIdDoonor")]
@@ -97,6 +104,51 @@ namespace ChineseAuctionAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving gifts for donor with ID {IdDonor}", IdDonor);
+            }
+        }
+
+        [HttpGet("GetDonorByGiftAsync/{gift}")]
+        public async Task<IActionResult> GetDonorByGiftAsync(string gift)
+        {
+            try
+            {
+                var donor = await _service.GetDonorByGiftAsync(gift);
+                return Ok(donor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving donor for gift {Gift}", gift);
+            }
+        }
+
+        [HttpGet("GetDonorByNameAsync/{name}")]
+        public async Task<IActionResult> GetDonorByNameAsync(string name)
+        {
+            try
+            {
+                var donor = await _service.GetDonorByNameAsync(name);
+                return Ok(donor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving donor with name {Name}", name);
+            }
+        }
+        [HttpGet("GetDonorByEmailAsync/{Email}")]
+        public async Task<IActionResult> GetDonorByEmailAsync(string Email)
+        {
+            try
+            {
+                var donor = await _service.GetDonorByEmailAsync(Email);
+                return Ok(donor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error retrieving donor with email {Email}", Email);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using ChineseAuctionAPI.DTO;
+﻿using ChineseAuctionAPI.Controllers;
+using ChineseAuctionAPI.DTO;
 using ChineseAuctionAPI.Repositories.Intarfaces;
 using ChineseAuctionAPI.Services.Intarfaces;
 
@@ -8,12 +9,14 @@ namespace ChineseAuctionAPI.Services
     {
         private readonly IOerderRepository _OrderRepository;
         private readonly IConfiguration _config;
+        private readonly ILogger<OrderController> _logger;
 
 
-        public OrderService(IOerderRepository oerderRepository, IConfiguration config)
+        public OrderService(IOerderRepository oerderRepository, IConfiguration config , ILogger<OrderController> logger)
         {
             _OrderRepository = oerderRepository;
             _config = config;
+            _logger = logger;
         }
         public async Task<bool> AddOrUpdateGiftInOrderAsync(int orderId, int giftId, int amount)
         {
@@ -64,11 +67,11 @@ namespace ChineseAuctionAPI.Services
                     userId = o.userId,
                     dateTime = o.dateTime,
                     Status = o.Status,
-                    orders = o.GiftsInCart.Select(oi => new OrderItemDTO
+                    Items = o.GiftsInCart.Select(oi => new OrderItemDTO
                     {
                         Name = oi.gifts.Name,
                         Description = oi.gifts.Description,
-                        Category = oi.gifts.Category,
+                        Category = oi.gifts.Category?.Name,
                         Amount = oi.Amount,
                         price = oi.gifts.price,
                         Image = oi.gifts.Image
@@ -95,11 +98,11 @@ namespace ChineseAuctionAPI.Services
                 {
                     dateTime = order.dateTime,
                     Status = order.Status,
-                    orders = order.GiftsInCart.Select(oi => new OrderItemDTO
+                    Items = order.GiftsInCart.Select(oi => new OrderItemDTO
                     {
                         Name = oi.gifts.Name,
                         Description = oi.gifts.Description,
-                        Category = oi.gifts.Category,
+                        Category = oi.gifts.Category?.Name,
                         Amount = oi.Amount,
                         price = oi.gifts.price,
                         Image = oi.gifts.Image
@@ -116,33 +119,42 @@ namespace ChineseAuctionAPI.Services
             }
         }
 
-        public async Task<OrderDTO?> GetDraftOrderByUserAsync(int userId)
+        public async Task<IEnumerable<OrderDTO>> GetDraftOrderByUserAsync(int userId)
         {
             try
             {
-                var draftOrder = await _OrderRepository.GetDraftOrderByUserAsync(userId);
-                if (draftOrder == null) return null;
+                var orders = await _OrderRepository.GetDraftOrderByUserAsync(userId);
 
-                return new OrderDTO
+                var ordersDto = orders.Select(o => new OrderDTO
                 {
-                    userId = draftOrder.userId,
-                    dateTime = draftOrder.dateTime,
-                    Status = draftOrder.Status,
-                    orders = draftOrder.GiftsInCart.Select(oi => new OrderItemDTO
+
+                    userId = o.userId,
+                    dateTime = o.dateTime,
+                    Status = o.Status,
+                  //  Amount = o.OrdersGift.Sum(og => og.Amount),
+                    TotalPrice = o.GiftsInCart.Sum(go => go.gifts.price),
+                    TotalAmount = o.GiftsInCart.Sum(go => go.Amount),
+                    OrdersGift = o.GiftsInCart.Select(og => new OrderItemDTO
                     {
-                        Name = oi.gifts.Name,
-                        Description = oi.gifts.Description,
-                        Category = oi.gifts.Category,
-                        Amount = oi.Amount,
-                        price = oi.gifts.price,
-                        Image = oi.gifts.Image
-                    }).ToList()
-                };
+                        Category = og.gifts.Category.Name,
+                        Name = og.gifts.Name ?? "",
+                        Amount = og.Amount,
+                        price = og.gifts.price,
+                        Description = og.gifts.Description,
+                        Image = og.gifts.Image
+                    })?.ToList(),
+
+                })?.ToList();
+
+                return ordersDto;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error retrieving draft order for user {userId}.", ex);
+                _logger.LogError(ex, "שגיאה בשליפת הזמנות למשתמש {UserId}.", userId);
+                throw;
             }
         }
+
+
     }
 }

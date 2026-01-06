@@ -9,12 +9,15 @@ namespace ChineseAuctionAPI.Services
     {
         private readonly ICategoryRpository _categoryRepository;
         private readonly IConfiguration _config;
+        private readonly ILogger<CategoryService> _logger;
 
 
-        public CategoryService(ICategoryRpository categoryRepository, IConfiguration config)
+
+        public CategoryService(ICategoryRpository categoryRepository, IConfiguration config , ILogger<CategoryService> logger)
         {
             _categoryRepository = categoryRepository;
             _config = config;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<GiftCategory>> GetAllAsync()

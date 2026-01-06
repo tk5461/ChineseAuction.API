@@ -27,7 +27,6 @@ namespace ChineseAuctionAPI.Models
         [Required]
         [Phone]
         public string PhonNumber { get; set; }
-
         public string City { get; set; }
         public string Address { get; set; }
         [Required]

@@ -1,0 +1,22 @@
+2026-01-01 23:58:32.028 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/User/register - application/json 219
+2026-01-01 23:58:32.038 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI)'
+2026-01-01 23:58:32.048 +02:00 [INF] Route matched with {action = "Register", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ChineseAuctionAPI.DTO.LoginUserDTO) on controller ChineseAuctionAPI.Controllers.UserController (ChineseAuctionAPI).
+2026-01-01 23:58:32.061 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]
+        WHERE [u].[Email] = @__email_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-01-01 23:58:32.198 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 450), @p3='?' (Size = 4000), @p4='?' (Size = 9), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Address], [City], [Email], [FirstName], [Identity], [LastName], [PhonNumber], [password], [role])
+OUTPUT INSERTED.[userId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+2026-01-01 23:58:32.202 +02:00 [INF] User registered successfully
+2026-01-01 23:58:32.202 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-01-01 23:58:32.203 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI) in 146.6489ms
+2026-01-01 23:58:32.204 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI)'
+2026-01-01 23:58:32.205 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/User/register - 200 null text/plain; charset=utf-8 177.3063ms

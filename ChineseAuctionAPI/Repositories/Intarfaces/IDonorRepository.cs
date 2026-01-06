@@ -10,5 +10,9 @@ namespace ChineseAuctionAPI.Repositories.Intarfaces
         Task<Donor> GetByIdAsync(int id);
         Task UpdateAsync(Donor donor);
         Task<IEnumerable<Gift>>? GetGiftsAsync(int IdDonor);
+        Task<IEnumerable<Donor>>? GetByNameAsync(string name);
+        Task<IEnumerable<Donor>>? GetByEmailAsync(string email);
+        Task<Donor> GetByGiftAsync(string gift);
+
     }
 }

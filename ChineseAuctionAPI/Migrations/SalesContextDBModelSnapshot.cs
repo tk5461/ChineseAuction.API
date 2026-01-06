@@ -33,9 +33,6 @@ namespace ChineseAuctionAPI.Migrations
                     b.Property<int>("IdGift")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PackageIdPackage")
-                        .HasColumnType("int");
-
                     b.Property<int>("price")
                         .HasColumnType("int");
 
@@ -43,8 +40,6 @@ namespace ChineseAuctionAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CurdId");
-
-                    b.HasIndex("PackageIdPackage");
 
                     b.HasIndex("userId");
 
@@ -108,6 +103,9 @@ namespace ChineseAuctionAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("PackageIdPackage")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -122,6 +120,8 @@ namespace ChineseAuctionAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("IdDonor");
+
+                    b.HasIndex("PackageIdPackage");
 
                     b.HasIndex("userId");
 
@@ -336,10 +336,6 @@ namespace ChineseAuctionAPI.Migrations
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Card", b =>
                 {
-                    b.HasOne("ChineseAuctionAPI.Models.Package", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("PackageIdPackage");
-
                     b.HasOne("ChineseAuctionAPI.Models.User", null)
                         .WithMany("cards")
                         .HasForeignKey("userId")
@@ -360,6 +356,10 @@ namespace ChineseAuctionAPI.Migrations
                         .HasForeignKey("IdDonor")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ChineseAuctionAPI.Models.Package", null)
+                        .WithMany("Gifts")
+                        .HasForeignKey("PackageIdPackage");
 
                     b.HasOne("ChineseAuctionAPI.Models.User", "User")
                         .WithMany()
@@ -411,7 +411,7 @@ namespace ChineseAuctionAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("ChineseAuctionAPI.Models.Order", "Order")
-                        .WithMany("Package_Order")
+                        .WithMany("PackageInCard")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -449,12 +449,12 @@ namespace ChineseAuctionAPI.Migrations
                 {
                     b.Navigation("GiftsInCart");
 
-                    b.Navigation("Package_Order");
+                    b.Navigation("PackageInCard");
                 });
 
             modelBuilder.Entity("ChineseAuctionAPI.Models.Package", b =>
                 {
-                    b.Navigation("Cards");
+                    b.Navigation("Gifts");
 
                     b.Navigation("PackageOrders");
                 });

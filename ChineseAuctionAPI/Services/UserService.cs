@@ -131,7 +131,7 @@ namespace ChineseAuctionAPI.Services
         {
             try
             {
-                var u = await _userRepository.GetUserWirhOrdersAsync(userId);
+                var u = await _userRepository.GetUserWithOrdersAndGiftsAsync(userId);
                 if (u == null) return null;
 
                 return new DTOuserOrder
@@ -143,7 +143,7 @@ namespace ChineseAuctionAPI.Services
                         Status = o.Status,
                         userId = o.userId,
                         dateTime = o.dateTime,
-                        orders = o.GiftsInCart?.Select(g => new OrderItemDTO
+                        Items = o.GiftsInCart?.Select(g => new OrderItemDTO
                         {
                             Amount = g.Amount
                         }).ToList() ?? new List<OrderItemDTO>()

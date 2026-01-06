@@ -59,11 +59,15 @@ namespace ChineseAuctionAPI.Repositories
                     .FirstOrDefaultAsync(p => p.userId == id);
         }
 
-        public async Task<User?> GetUserWirhOrdersAsync(int userId)
+ 
+
+        public async Task<User?> GetUserWithOrdersAndGiftsAsync(int id)
         {
             return await _context.Users
-                          .Include(u => u.Orders)
-                          .FirstOrDefaultAsync(u => u.userId == userId);
+                .Include(u => u.Orders) 
+                    .ThenInclude(o => o.GiftsInCart) 
+                        .ThenInclude(go => go.gifts)
+                .FirstOrDefaultAsync(u => u.userId == id);
         }
     }
 }

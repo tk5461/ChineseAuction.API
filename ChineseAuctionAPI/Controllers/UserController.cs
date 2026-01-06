@@ -12,12 +12,18 @@ namespace ChineseAuctionAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(IUserService userService , ILogger<UserController> logger)
         {
             _userService = userService;
+            _logger = logger;
+
         }
 
         [HttpGet("GetAllAsync")]
+        [Authorize(Roles = "Manager")]
+
         public async Task<IActionResult> GetAllUsers()
         {
             try
@@ -27,45 +33,11 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error get all users");
                 return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpGet("GetByIdAsync/{id}")]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            try
-            {
-                var user = await _userService.GetByIdAsync(id);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpGet("GetUserWirhOrdersAsync/{userId}")]
-        public async Task<IActionResult> GetUserWithOrders(int userId)
-        {
-            try
-            {
-                var userWithOrders = await _userService.GetUserWirhOrdersAsync(userId);
-                if (userWithOrders == null)
-                {
-                    return NotFound();
-                }
-                return Ok(userWithOrders);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] LoginUserDTO dto)
@@ -73,10 +45,12 @@ namespace ChineseAuctionAPI.Controllers
             try
             {
                 var resp = await _userService.RegisterAsync(dto);
+                _logger.LogInformation("User registered successfully");
                 return Ok(resp);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error Register");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -87,10 +61,12 @@ namespace ChineseAuctionAPI.Controllers
             try
             {
                 var resp = await _userService.LoginAsync(dto.Email, dto.password);
+                _logger.LogInformation("User logged in successfully");
                 return Ok(resp);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error login");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -109,6 +85,7 @@ namespace ChineseAuctionAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error Delet user", id);
                 return StatusCode(500, ex.Message);
             }
         }

@@ -19,7 +19,7 @@ namespace ChineseAuctionAPI.Models
         [Range(1, 1000, ErrorMessage = "הכמות חייבת להיות לפחות 1")]
         public int Quantity { get; set; } = 1;
         [Range(0, 10000, ErrorMessage = "המחיר אינו יכול להיות שלילי")]
-        public int price { get; set; }
+        public int price { get; set; } 
         public string? Image { get; set; }
         [Required]
         public int IdDonor { get; set; }
@@ -27,9 +27,11 @@ namespace ChineseAuctionAPI.Models
         [ForeignKey(nameof(IdDonor))] 
         public Donor Donor { get; set; }
         public bool IsDrawn { get; set; } = false;
-        public int? userId { get; set; }
+        public int? userId { get; set; }  
         [ForeignKey(nameof(userId))]
         public User? User { get; set; }
         public ICollection<Gift_Order> GiftOrders { get; set; } 
     }
 }
+
+

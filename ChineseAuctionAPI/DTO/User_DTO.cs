@@ -20,6 +20,23 @@ namespace ChineseAuctionAPI.DTO
         public string City { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
     }
+    public class User_DTO1
+    {
+        public string Identity { get; set; } = string.Empty;
+        [Required]
+        public string First_Name { get; set; } = string.Empty;
+        [Required]
+        public string Last_Name { get; set; } = string.Empty;
+
+        [EmailAddress]
+        public string? Email { get; set; }
+
+        [Phone]
+        public string PhonNumber { get; set; } = string.Empty;
+
+        public string City { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+    }
 
     public class LoginResponseDTO
     {

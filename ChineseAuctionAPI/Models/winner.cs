@@ -11,9 +11,9 @@ namespace ChineseAuctionAPI.Models
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User user { get; set; }
-        [Required]
+        [Required] 
         public int IdGift { get; set; }
         [ForeignKey(nameof(IdGift))]
         public Gift gift { get; set; }
     }
-}
+} 

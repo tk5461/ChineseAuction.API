@@ -1,0 +1,15 @@
+2026-01-01 22:12:55.296 +02:00 [INF] The application has started successfully!
+2026-01-01 22:12:55.479 +02:00 [INF] User profile is available. Using 'C:\Users\1\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-01-01 22:12:55.701 +02:00 [INF] Now listening on: https://localhost:7157
+2026-01-01 22:12:55.702 +02:00 [INF] Now listening on: http://localhost:5183
+2026-01-01 22:12:55.801 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-01-01 22:12:55.802 +02:00 [INF] Hosting environment: Development
+2026-01-01 22:12:55.803 +02:00 [INF] Content root path: C:\Users\1\OneDrive\Desktop\projects\Finish Project !!\ChineseAuctionAPI\ChineseAuctionAPI
+2026-01-01 22:12:56.034 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7157/swagger/index.html - null null
+2026-01-01 22:12:56.189 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7157/swagger/index.html - 200 null text/html;charset=utf-8 164.0009ms
+2026-01-01 22:12:56.193 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7157/_vs/browserLink - null null
+2026-01-01 22:12:56.193 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7157/_framework/aspnetcore-browser-refresh.js - null null
+2026-01-01 22:12:56.210 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7157/_framework/aspnetcore-browser-refresh.js - 200 16519 application/javascript; charset=utf-8 17.138ms
+2026-01-01 22:12:56.238 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7157/_vs/browserLink - 200 null text/javascript; charset=UTF-8 44.1088ms
+2026-01-01 22:12:56.274 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7157/swagger/v1/swagger.json - null null
+2026-01-01 22:12:56.301 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7157/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 27.0333ms

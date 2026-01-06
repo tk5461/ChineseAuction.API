@@ -1,0 +1,37 @@
+2026-01-01 23:31:10.020 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/Order/add-gift - application/json 49
+2026-01-01 23:31:10.035 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:31:10.040 +02:00 [INF] Route matched with {action = "AddOrUpdateGift", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AddOrUpdateGift(ChineseAuctionAPI.DTO.AddGiftRequest) on controller ChineseAuctionAPI.Controllers.OrderController (ChineseAuctionAPI).
+2026-01-01 23:31:10.157 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [o0].[OrderId], [o0].[Status], [o0].[dateTime], [o0].[price], [o0].[userId], [g].[IdGiftOrder], [g].[Amount], [g].[IdGift], [g].[OrderId]
+FROM (
+    SELECT TOP(1) [o].[OrderId], [o].[Status], [o].[dateTime], [o].[price], [o].[userId]
+    FROM [Orders] AS [o]
+    WHERE [o].[userId] = @__userId_0 AND [o].[Status] = 0
+) AS [o0]
+LEFT JOIN [Gifts_Orders] AS [g] ON [o0].[OrderId] = [g].[OrderId]
+ORDER BY [o0].[OrderId]
+2026-01-01 23:31:10.204 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[IdGift], [g].[CategoryId], [g].[Description], [g].[IdDonor], [g].[Image], [g].[IsDrawn], [g].[Name], [g].[PackageIdPackage], [g].[Quantity], [g].[price], [g].[userId]
+FROM [Gifts] AS [g]
+WHERE [g].[IdGift] = @__p_0
+2026-01-01 23:31:10.318 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Orders] ([Status], [dateTime], [price], [userId])
+OUTPUT INSERTED.[OrderId]
+VALUES (@p0, @p1, @p2, @p3);
+2026-01-01 23:31:10.343 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@p4='?' (DbType = Int32), @p5='?' (DbType = Int32), @p6='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Gifts_Orders] ([Amount], [IdGift], [OrderId])
+OUTPUT INSERTED.[IdGiftOrder]
+VALUES (@p4, @p5, @p6);
+2026-01-01 23:31:10.362 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-01-01 23:31:10.365 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI) in 323.8352ms
+2026-01-01 23:31:10.366 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:31:10.367 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/Order/add-gift - 200 null text/plain; charset=utf-8 346.427ms
+2026-01-01 23:31:48.098 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/Gift/11/draw - null 0
+2026-01-01 23:31:48.123 +02:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Manager)
+2026-01-01 23:31:48.127 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2026-01-01 23:31:48.128 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/Gift/11/draw - 401 0 null 30.8313ms

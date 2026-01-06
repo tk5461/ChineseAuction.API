@@ -315,6 +315,94 @@
         }
       }
     },
+    "/api/Donor/GetGiftByIdDoonor": {
+      "get": {
+        "tags": [
+          "Donor"
+        ],
+        "parameters": [
+          {
+            "name": "IdDonor",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Donor/GetDonorByGiftAsync/{gift}": {
+      "get": {
+        "tags": [
+          "Donor"
+        ],
+        "parameters": [
+          {
+            "name": "gift",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Donor/GetDonorByNameAsync/{name}": {
+      "get": {
+        "tags": [
+          "Donor"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Donor/GetDonorByEmailAsync/{Email}": {
+      "get": {
+        "tags": [
+          "Donor"
+        ],
+        "parameters": [
+          {
+            "name": "Email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Gift": {
       "get": {
         "tags": [
@@ -356,7 +444,7 @@
         }
       }
     },
-    "/api/Gift/{id}": {
+    "/api/Gift/id/{id}": {
       "get": {
         "tags": [
           "Gift"
@@ -377,8 +465,124 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Gift/GiftName/{GiftName}": {
+      "get": {
+        "tags": [
+          "Gift"
+        ],
+        "parameters": [
+          {
+            "name": "GiftName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/DonorName/{DonorName}": {
+      "get": {
+        "tags": [
+          "Gift"
+        ],
+        "parameters": [
+          {
+            "name": "DonorName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/CountBuyers/{CountBuyers}": {
+      "get": {
+        "tags": [
+          "Gift"
+        ],
+        "parameters": [
+          {
+            "name": "CountBuyers",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/SortByAmountPepole": {
+      "get": {
+        "tags": [
+          "Gift"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/SortByPrice": {
+      "get": {
+        "tags": [
+          "Gift"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/{id}": {
       "delete": {
+        "tags": [
+          "Gift"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Gift/{id}/draw": {
+      "post": {
         "tags": [
           "Gift"
         ],
@@ -449,7 +653,7 @@
         }
       }
     },
-    "/api/Order/draft/{userId}": {
+    "/api/Order/GetByIdWithGiftsAsync/{userId}": {
       "get": {
         "tags": [
           "Order"
@@ -471,17 +675,26 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDTO"
+                  }
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDTO"
+                  }
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderDTO"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderDTO"
+                  }
                 }
               }
             }
@@ -621,11 +834,66 @@
         }
       }
     },
-    "/api/User/GetAllAsync": {
+    "/api/Package": {
       "get": {
         "tags": [
-          "User"
+          "Package"
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Package"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Package"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -633,10 +901,88 @@
         }
       }
     },
-    "/api/User/GetByIdAsync/{id}": {
+    "/api/Package/{id}": {
       "get": {
         "tags": [
-          "User"
+          "Package"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Package"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PackageDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Package"
         ],
         "parameters": [
           {
@@ -656,21 +1002,10 @@
         }
       }
     },
-    "/api/User/GetUserWirhOrdersAsync/{userId}": {
+    "/api/User/GetAllAsync": {
       "get": {
         "tags": [
           "User"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -771,11 +1106,11 @@
         "required": [
           "amount",
           "giftId",
-          "orderId"
+          "userId"
         ],
         "type": "object",
         "properties": {
-          "orderId": {
+          "userId": {
             "maximum": 2147483647,
             "minimum": 1,
             "type": "integer",
@@ -796,6 +1131,31 @@
         },
         "additionalProperties": false
       },
+      "Card": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "curdId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idGift": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "CategoryDTO": {
         "required": [
           "name"
@@ -805,6 +1165,38 @@
           "name": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Donor": {
+        "required": [
+          "f_name",
+          "l_name"
+        ],
+        "type": "object",
+        "properties": {
+          "idDonor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "f_name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "l_name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phonNumber": {
+            "type": "string",
+            "format": "tel",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -832,6 +1224,78 @@
           "phoneNumber": {
             "type": "string",
             "format": "tel",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Gift": {
+        "required": [
+          "categoryId",
+          "idDonor",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "idGift": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "category": {
+            "$ref": "#/components/schemas/GiftCategory"
+          },
+          "quantity": {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "idDonor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "donor": {
+            "$ref": "#/components/schemas/Donor"
+          },
+          "isDrawn": {
+            "type": "boolean"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "giftOrders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Gift_Order"
+            },
             "nullable": true
           }
         },
@@ -892,6 +1356,39 @@
             "nullable": true
           },
           "idDonor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Gift_Order": {
+        "required": [
+          "amount",
+          "idGift",
+          "orderId"
+        ],
+        "type": "object",
+        "properties": {
+          "idGiftOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idGift": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gifts": {
+            "$ref": "#/components/schemas/Gift"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "amount": {
             "type": "integer",
             "format": "int32"
           }
@@ -967,6 +1464,56 @@
         },
         "additionalProperties": false
       },
+      "Order": {
+        "required": [
+          "dateTime",
+          "price",
+          "status",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "price": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "packageInCard": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Package_Order"
+            },
+            "nullable": true
+          },
+          "giftsInCart": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Gift_Order"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OrderDTO": {
         "required": [
           "dateTime",
@@ -988,7 +1535,7 @@
             "type": "string",
             "format": "date-time"
           },
-          "orders": {
+          "items": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OrderItemDTO"
@@ -1006,6 +1553,13 @@
             "minimum": 0,
             "type": "integer",
             "format": "int32"
+          },
+          "ordersGift": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemDTO"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1027,7 +1581,8 @@
             "nullable": true
           },
           "category": {
-            "$ref": "#/components/schemas/GiftCategory"
+            "minLength": 1,
+            "type": "string"
           },
           "amount": {
             "maximum": 100,
@@ -1055,6 +1610,219 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "Package": {
+        "required": [
+          "name",
+          "price"
+        ],
+        "type": "object",
+        "properties": {
+          "idPackage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gifts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Gift"
+            },
+            "nullable": true
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "amount_Regular": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "packageOrders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Package_Order"
+            },
+            "nullable": true
+          },
+          "amount_Premium": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PackageDTO": {
+        "required": [
+          "name",
+          "price"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "amount_Regular": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount_Premium": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Package_Order": {
+        "required": [
+          "idPackage",
+          "orderId",
+          "priceAtPurchase",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "idPackageOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "orderId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "idPackage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "package": {
+            "$ref": "#/components/schemas/Package"
+          },
+          "quantity": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "priceAtPurchase": {
+            "maximum": 50000,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Role": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "User": {
+        "required": [
+          "email",
+          "firstName",
+          "identity",
+          "lastName",
+          "password",
+          "phonNumber",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identity": {
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "minLength": 6,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "phonNumber": {
+            "minLength": 1,
+            "type": "string",
+            "format": "tel"
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "orders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "nullable": true
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Card"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     },
     "securitySchemes": {

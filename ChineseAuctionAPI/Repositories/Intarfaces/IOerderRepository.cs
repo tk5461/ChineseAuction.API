@@ -1,4 +1,5 @@
-﻿using ChineseAuctionAPI.Models;
+﻿using System.Threading.Tasks;
+using ChineseAuctionAPI.Models;
 
 namespace ChineseAuctionAPI.Repositories.Intarfaces
 {
@@ -6,7 +7,7 @@ namespace ChineseAuctionAPI.Repositories.Intarfaces
     {
         Task<IEnumerable<Order?>> GetAllAsync(int userId);
         Task<bool> DeleteAsync(int orderId, int giftId, int amount);
-        Task<Order?> GetDraftOrderByUserAsync(int userId);
+        Task<IEnumerable<Order>> GetDraftOrderByUserAsync(int userId);
         Task<Order> CreateDraftOrderAsync(int userId);
         Task AddOrUpdateGiftInOrderAsync(int orderId, int giftId, int amount);
         Task<Order?> GetByIdWithGiftsAsync(int orderId);

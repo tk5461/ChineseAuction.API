@@ -6,7 +6,7 @@ namespace ChineseAuctionAPI.Models
     {
         [Key]
         public int IdPackage { get; set; }
-        public ICollection<Card> Cards { get; set;} 
+        public ICollection<Gift> Gifts { get; set;} 
         [Required]
         public string Name { get; set; }
         [StringLength(500, ErrorMessage = "תיאור החבילה לא יכול לעלות על 500 תווים")]
@@ -18,6 +18,5 @@ namespace ChineseAuctionAPI.Models
         public int? Amount_Premium { get; set; }
         [Required]
         public int Price { get; set; }
-
     }
 }

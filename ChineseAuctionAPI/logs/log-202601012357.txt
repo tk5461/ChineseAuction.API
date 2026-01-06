@@ -1,0 +1,116 @@
+2026-01-01 23:57:12.528 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/User/register - application/json 236
+2026-01-01 23:57:12.537 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI)'
+2026-01-01 23:57:12.539 +02:00 [INF] Route matched with {action = "Register", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ChineseAuctionAPI.DTO.LoginUserDTO) on controller ChineseAuctionAPI.Controllers.UserController (ChineseAuctionAPI).
+2026-01-01 23:57:12.546 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Users] AS [u]
+        WHERE [u].[Email] = @__email_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-01-01 23:57:12.691 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 450), @p3='?' (Size = 4000), @p4='?' (Size = 9), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Address], [City], [Email], [FirstName], [Identity], [LastName], [PhonNumber], [password], [role])
+OUTPUT INSERTED.[userId]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+2026-01-01 23:57:12.694 +02:00 [INF] User registered successfully
+2026-01-01 23:57:12.695 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-01-01 23:57:12.696 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI) in 154.7933ms
+2026-01-01 23:57:12.697 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.UserController.Register (ChineseAuctionAPI)'
+2026-01-01 23:57:12.697 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/User/register - 200 null text/plain; charset=utf-8 169.358ms
+2026-01-01 23:57:37.341 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/Order/add-gift - application/json 49
+2026-01-01 23:57:37.353 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:57:37.355 +02:00 [INF] Route matched with {action = "AddOrUpdateGift", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AddOrUpdateGift(ChineseAuctionAPI.DTO.AddGiftRequest) on controller ChineseAuctionAPI.Controllers.OrderController (ChineseAuctionAPI).
+2026-01-01 23:57:37.361 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [o0].[OrderId], [o0].[Status], [o0].[dateTime], [o0].[price], [o0].[userId], [g].[IdGiftOrder], [g].[Amount], [g].[IdGift], [g].[OrderId]
+FROM (
+    SELECT TOP(1) [o].[OrderId], [o].[Status], [o].[dateTime], [o].[price], [o].[userId]
+    FROM [Orders] AS [o]
+    WHERE [o].[userId] = @__userId_0 AND [o].[Status] = 0
+) AS [o0]
+LEFT JOIN [Gifts_Orders] AS [g] ON [o0].[OrderId] = [g].[OrderId]
+ORDER BY [o0].[OrderId]
+2026-01-01 23:57:37.365 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[IdGift], [g].[CategoryId], [g].[Description], [g].[IdDonor], [g].[Image], [g].[IsDrawn], [g].[Name], [g].[PackageIdPackage], [g].[Quantity], [g].[price], [g].[userId]
+FROM [Gifts] AS [g]
+WHERE [g].[IdGift] = @__p_0
+2026-01-01 23:57:37.371 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Orders] ([Status], [dateTime], [price], [userId])
+OUTPUT INSERTED.[OrderId]
+VALUES (@p0, @p1, @p2, @p3);
+2026-01-01 23:57:37.374 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@p4='?' (DbType = Int32), @p5='?' (DbType = Int32), @p6='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Gifts_Orders] ([Amount], [IdGift], [OrderId])
+OUTPUT INSERTED.[IdGiftOrder]
+VALUES (@p4, @p5, @p6);
+2026-01-01 23:57:37.376 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-01-01 23:57:37.377 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI) in 21.205ms
+2026-01-01 23:57:37.378 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:57:37.378 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/Order/add-gift - 200 null text/plain; charset=utf-8 37.2806ms
+2026-01-01 23:57:41.951 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/Order/add-gift - application/json 49
+2026-01-01 23:57:41.953 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:57:41.954 +02:00 [INF] Route matched with {action = "AddOrUpdateGift", controller = "Order"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AddOrUpdateGift(ChineseAuctionAPI.DTO.AddGiftRequest) on controller ChineseAuctionAPI.Controllers.OrderController (ChineseAuctionAPI).
+2026-01-01 23:57:41.958 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [o0].[OrderId], [o0].[Status], [o0].[dateTime], [o0].[price], [o0].[userId], [g].[IdGiftOrder], [g].[Amount], [g].[IdGift], [g].[OrderId]
+FROM (
+    SELECT TOP(1) [o].[OrderId], [o].[Status], [o].[dateTime], [o].[price], [o].[userId]
+    FROM [Orders] AS [o]
+    WHERE [o].[userId] = @__userId_0 AND [o].[Status] = 0
+) AS [o0]
+LEFT JOIN [Gifts_Orders] AS [g] ON [o0].[OrderId] = [g].[OrderId]
+ORDER BY [o0].[OrderId]
+2026-01-01 23:57:41.963 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[IdGift], [g].[CategoryId], [g].[Description], [g].[IdDonor], [g].[Image], [g].[IsDrawn], [g].[Name], [g].[PackageIdPackage], [g].[Quantity], [g].[price], [g].[userId]
+FROM [Gifts] AS [g]
+WHERE [g].[IdGift] = @__p_0
+2026-01-01 23:57:41.967 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (DbType = Int32), @p3='?' (DbType = Int32), @p2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Gifts_Orders] SET [Amount] = @p0
+OUTPUT 1
+WHERE [IdGiftOrder] = @p1;
+UPDATE [Orders] SET [price] = @p2
+OUTPUT 1
+WHERE [OrderId] = @p3;
+2026-01-01 23:57:41.970 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-01-01 23:57:41.970 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI) in 14.7281ms
+2026-01-01 23:57:41.971 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.OrderController.AddOrUpdateGift (ChineseAuctionAPI)'
+2026-01-01 23:57:41.972 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/Order/add-gift - 200 null text/plain; charset=utf-8 21.4174ms
+2026-01-01 23:57:51.043 +02:00 [INF] Request starting HTTP/2 POST https://localhost:7157/api/Gift/17/draw - null 0
+2026-01-01 23:57:51.045 +02:00 [INF] Executing endpoint 'ChineseAuctionAPI.Controllers.GiftController.DrawWinner (ChineseAuctionAPI)'
+2026-01-01 23:57:51.045 +02:00 [INF] Route matched with {action = "DrawWinner", controller = "Gift"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DrawWinner(Int32) on controller ChineseAuctionAPI.Controllers.GiftController (ChineseAuctionAPI).
+2026-01-01 23:57:51.056 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[@__giftId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [g1].[IdGift], [g1].[CategoryId], [g1].[Description], [g1].[IdDonor], [g1].[Image], [g1].[IsDrawn], [g1].[Name], [g1].[PackageIdPackage], [g1].[Quantity], [g1].[price], [g1].[userId], [s].[IdGiftOrder], [s].[Amount], [s].[IdGift], [s].[OrderId], [s].[OrderId0], [s].[Status], [s].[dateTime], [s].[price], [s].[userId], [s].[userId0], [s].[Address], [s].[City], [s].[Email], [s].[FirstName], [s].[Identity], [s].[LastName], [s].[PhonNumber], [s].[password], [s].[role]
+FROM (
+    SELECT TOP(1) [g].[IdGift], [g].[CategoryId], [g].[Description], [g].[IdDonor], [g].[Image], [g].[IsDrawn], [g].[Name], [g].[PackageIdPackage], [g].[Quantity], [g].[price], [g].[userId]
+    FROM [Gifts] AS [g]
+    WHERE [g].[IdGift] = @__giftId_0
+) AS [g1]
+LEFT JOIN (
+    SELECT [g0].[IdGiftOrder], [g0].[Amount], [g0].[IdGift], [g0].[OrderId], [o].[OrderId] AS [OrderId0], [o].[Status], [o].[dateTime], [o].[price], [o].[userId], [u].[userId] AS [userId0], [u].[Address], [u].[City], [u].[Email], [u].[FirstName], [u].[Identity], [u].[LastName], [u].[PhonNumber], [u].[password], [u].[role]
+    FROM [Gifts_Orders] AS [g0]
+    INNER JOIN [Orders] AS [o] ON [g0].[OrderId] = [o].[OrderId]
+    INNER JOIN [Users] AS [u] ON [o].[userId] = [u].[userId]
+) AS [s] ON [g1].[IdGift] = [s].[IdGift]
+ORDER BY [g1].[IdGift], [s].[IdGiftOrder], [s].[OrderId0]
+2026-01-01 23:57:51.062 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (DbType = Boolean), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Gifts] SET [IsDrawn] = @p0
+OUTPUT 1
+WHERE [IdGift] = @p1;
+INSERT INTO [Winners] ([IdGift], [UserId])
+OUTPUT INSERTED.[IdWin]
+VALUES (@p2, @p3);
+2026-01-01 23:57:51.066 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[userId], [u].[Address], [u].[City], [u].[Email], [u].[FirstName], [u].[Identity], [u].[LastName], [u].[PhonNumber], [u].[password], [u].[role]
+FROM [Users] AS [u]
+WHERE [u].[userId] = @__id_0
+2026-01-01 23:57:51.069 +02:00 [INF] מייל ברכה נשלח לזוכה 12 על המתנה 17
+2026-01-01 23:57:51.070 +02:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-01-01 23:57:51.071 +02:00 [INF] Executed action ChineseAuctionAPI.Controllers.GiftController.DrawWinner (ChineseAuctionAPI) in 23.3638ms
+2026-01-01 23:57:51.072 +02:00 [INF] Executed endpoint 'ChineseAuctionAPI.Controllers.GiftController.DrawWinner (ChineseAuctionAPI)'
+2026-01-01 23:57:51.075 +02:00 [INF] Request finished HTTP/2 POST https://localhost:7157/api/Gift/17/draw - 200 null application/json; charset=utf-8 32.3224ms
